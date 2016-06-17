@@ -8,6 +8,8 @@ using Microsoft.Kinect;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using Emgu.CV;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace BallCheatARKinect
 {
