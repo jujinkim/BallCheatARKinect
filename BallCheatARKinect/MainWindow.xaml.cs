@@ -24,7 +24,7 @@ namespace BallCheatARKinect
     /// </summary>
     public partial class MainWindow : Window
     {
-        enum DisplayImg { TOTAL, BALL, DEPTH, CUE, DISPLAY }
+        enum DisplayImg { TOTAL, DEPTH, BALL, CUE, DISPLAY }
 
         #region Kinect Objects
         KinectSensor sensor;
@@ -57,9 +57,9 @@ namespace BallCheatARKinect
 
         int ballDrawingRadiusMultiply = 2;  //출력할 때 공 동그라미 그리는거 크기 반지름배수
 
-        bool isPoolDepthSetting = false;
-        bool isBallDepthSetting = false;
-        int poolPosSetting = 0;
+        bool isPoolDepthSetting = true;
+        bool isBallDepthSetting = true;
+        int poolPosSetting = 1;
 
         Point[] poolPos = new Point[2]; //Region of Interest
         int poolWidth, poolHeight;  //poolPos 설정시에 자동으로 설정
@@ -152,9 +152,34 @@ namespace BallCheatARKinect
                         this.colorPixels, this.colorBitmap.PixelWidth * sizeof(int), 0);
                     imgColor = new Image<Bgr, byte>(colorBitmap.ToBitmap());
 
+                    //draw pool position setting guideline
+                    if (!isPoolDepthSetting && !isBallDepthSetting)
+                        try
+                        {
+                            if (poolPosSetting == 1)
+                            {
+                                if (lblPoolPos1Val.Text.IndexOf(',') > 0)
+                                {
+                                    Point mP = Point.Parse(lblPoolPos1Val.Text);
+                                    CvInvoke.cvLine(imgColor, new System.Drawing.Point((int)mP.X, 0), new System.Drawing.Point((int)mP.X, 480), new MCvScalar(100, 100, 100), 1, Emgu.CV.CvEnum.LINE_TYPE.FOUR_CONNECTED, 0);
+                                    CvInvoke.cvLine(imgColor, new System.Drawing.Point(0, (int)mP.Y), new System.Drawing.Point(640, (int)mP.Y), new MCvScalar(100, 100, 100), 1, Emgu.CV.CvEnum.LINE_TYPE.FOUR_CONNECTED, 0);
+                                }
+                            }
+                            else if (poolPosSetting == 2)
+                            {
+                                if (lblPoolPos2Val.Text.IndexOf(',') > 0)
+                                {
+                                    Point mP = Point.Parse(lblPoolPos2Val.Text);
+                                    CvInvoke.cvLine(imgColor, new System.Drawing.Point((int)mP.X, 0), new System.Drawing.Point((int)mP.X, 480), new MCvScalar(100, 100, 100), 1, Emgu.CV.CvEnum.LINE_TYPE.FOUR_CONNECTED, 0);
+                                    CvInvoke.cvLine(imgColor, new System.Drawing.Point(0, (int)mP.Y), new System.Drawing.Point(640, (int)mP.Y), new MCvScalar(100, 100, 100), 1, Emgu.CV.CvEnum.LINE_TYPE.FOUR_CONNECTED, 0);
+                                }
+                            }
+                        }
+                        catch { }
+
                 }
 
-               
+
             }
 
             if (isDisplayOn)
@@ -208,12 +233,10 @@ namespace BallCheatARKinect
         {
             if (sensor != null) sensor.Stop();
         }
-
-        private void frmMain_MouseDown(object sender, MouseButtonEventArgs e)
+        private void textBlock_MouseDown(object sender, MouseButtonEventArgs e)
         {
             DragMove();
         }
-
         /// <summary>
         /// Exit
         /// </summary>
@@ -254,12 +277,14 @@ namespace BallCheatARKinect
             {
                 ballDepth = depthPixels[(int)(mPos.X + (mPos.Y * 640))].Depth;
                 lblBallDepthVal.Text = ballDepth.ToString();
+                lblBallDepthVal.FontWeight = FontWeights.Normal;
                 isBallDepthSetting = false;
             }
             else if(isPoolDepthSetting)
             {
                 poolDepth = depthPixels[(int)(mPos.X + (mPos.Y * 640))].Depth;
                 lblPoolDepthVal.Text = poolDepth.ToString();
+                lblPoolDepthVal.FontWeight = FontWeights.Normal;
                 isPoolDepthSetting = false;
             }
             else
@@ -268,6 +293,7 @@ namespace BallCheatARKinect
                 {
                     poolPos[0] = mPos;
                     lblPoolPos1Val.Text = mPos.ToString();
+                    lblPoolPos1Val.FontWeight = FontWeights.Normal;
                     poolPosSetting = 2;
                 }
                 else if(poolPosSetting == 2)
@@ -277,6 +303,7 @@ namespace BallCheatARKinect
                     poolWidth = (int)Math.Abs(poolPos[1].X - poolPos[0].X);
                     poolHeight = (int)Math.Abs(poolPos[1].Y - poolPos[0].Y);
                     lblPoolPos2Val.Text = mPos.ToString();
+                    lblPoolPos2Val.FontWeight = FontWeights.Normal;
                     poolPosSetting = 0;
                 }
             }
@@ -286,18 +313,20 @@ namespace BallCheatARKinect
             Point mPos = e.GetPosition(imgOutMain);
             if (isBallDepthSetting)
             {
+                ballDepth = depthPixels[(int)(mPos.X + (mPos.Y * 640))].Depth;
                 lblBallDepthVal.Text = ballDepth.ToString();
+                lblBallDepthVal.FontWeight = FontWeights.Bold;
             }
             else if (isPoolDepthSetting)
             {
+                poolDepth = depthPixels[(int)(mPos.X + (mPos.Y * 640))].Depth;
                 lblPoolDepthVal.Text = poolDepth.ToString();
+                lblPoolDepthVal.FontWeight = FontWeights.Bold;
             }
             else if (poolPosSetting != 0)
             {
-                if (poolPosSetting == 1) lblPoolPos1Val.Text = mPos.ToString();
-                if (poolPosSetting == 2) lblPoolPos2Val.Text = mPos.ToString();
-                CvInvoke.cvLine(imgColor, new System.Drawing.Point((int)mPos.X, 0), new System.Drawing.Point((int)mPos.X, 480), new MCvScalar(100, 100, 100), 1, Emgu.CV.CvEnum.LINE_TYPE.FOUR_CONNECTED, 0);
-                CvInvoke.cvLine(imgColor, new System.Drawing.Point(0, (int)mPos.Y), new System.Drawing.Point(640, (int)mPos.Y), new MCvScalar(100, 100, 100), 1, Emgu.CV.CvEnum.LINE_TYPE.FOUR_CONNECTED, 0);
+                if (poolPosSetting == 1) { lblPoolPos1Val.Text = mPos.ToString(); lblPoolPos1Val.FontWeight = FontWeights.Bold; }
+                if (poolPosSetting == 2) { lblPoolPos2Val.Text = mPos.ToString(); lblPoolPos2Val.FontWeight = FontWeights.Bold; }
             }
         }
 
@@ -316,12 +345,27 @@ namespace BallCheatARKinect
             ballSizeMin = (int)((Slider)sender).Value;
         }
 
-
         private void sldBallSizeMax_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             ballSizeMax = (int)((Slider)sender).Value;
         }
         #endregion
 
+        #region Parameter Setting Button Binding
+        private void btnSetPoolPos_Click(object sender, RoutedEventArgs e)
+        {
+            poolPosSetting = 1;
+        }
+
+        private void btnSetBallDepth_Click(object sender, RoutedEventArgs e)
+        {
+            isBallDepthSetting = true;
+        }
+
+        private void btnSetPoolDepth_Click(object sender, RoutedEventArgs e)
+        {
+            isPoolDepthSetting = true;
+        }
+        #endregion
     }
 }

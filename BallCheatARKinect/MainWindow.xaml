@@ -5,16 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BallCheatARKinect"
         mc:Ignorable="d"
-        Title="BallCheat" Height="641" Width="850" Loaded="frmMain_Loaded" Closing="frmMain_Closing" MouseDown="frmMain_MouseDown" WindowStyle="None" ResizeMode="CanMinimize" Background="White">
+        Title="BallCheat" Height="641" Width="850" Loaded="frmMain_Loaded" Closing="frmMain_Closing" WindowStyle="None" ResizeMode="CanMinimize" Background="White">
     <Grid>
         <Image x:Name="imgOutMain" HorizontalAlignment="Left" Height="480" Margin="10,45,0,0" VerticalAlignment="Top" Width="640" Tag="0" Cursor="Cross" MouseDown="imgOutMain_MouseDown" MouseMove="imgOutMain_MouseMove"/>
         <StackPanel x:Name="pnlSetting" HorizontalAlignment="Left" Height="455" Margin="655,10,0,0" VerticalAlignment="Top" Width="185" Background="#FFFAFAFA">
-            <Button x:Name="btnSetPoolPos" Content="Set pool position" Height="30"/>
-            <Button x:Name="btnSetPoolHeight" Content="Set pool height" Height="30"/>
+            <Button x:Name="btnSetPoolPos" Content="Set pool position" Height="30" Click="btnSetPoolPos_Click"/>
+            <Button x:Name="btnSetPoolDepth" Content="Set pool height" Height="30" Click="btnSetPoolDepth_Click"/>
+            <Button x:Name="btnSetBallDepth" Content="Set ball height" Height="30" Click="btnSetBallDepth_Click"/>
             <TextBlock x:Name="lblRangeSetting" TextWrapping="Wrap" Text="Range Setting" Background="#FFBEBEBE" Height="30" TextAlignment="Center" FontSize="18"/>
             <TextBlock x:Name="lblPoolDepthRange" TextWrapping="Wrap" Text="Pool Depth Range" Margin="0,0,0,2"/>
             <StackPanel Orientation="Horizontal">
-                <Slider x:Name="sldPoolDepthRange" Maximum="100" Value="{Binding Mode=TwoWay, ElementName=txtPoolDepthRange, Path=Text}" SmallChange="1" LargeChange="10" TickFrequency="5" TickPlacement="BottomRight" ValueChanged="sldPoolDepthRange_ValueChanged" Margin="0,0,0,18" Width="145"/>
+                <Slider x:Name="sldPoolDepthRange" Maximum="100" Value="{Binding Mode=TwoWay, ElementName=txtPoolDepthRange, Path=Text}" SmallChange="1" LargeChange="10" TickFrequency="5" TickPlacement="BottomRight" ValueChanged="sldPoolDepthRange_ValueChanged" Width="145"/>
                 <TextBox x:Name="txtPoolDepthRange" Height="23" TextWrapping="Wrap" Text="20" Width="40" RenderTransformOrigin="0.425,0"/>
             </StackPanel>
             <TextBlock x:Name="lblBallDepthRange" TextWrapping="Wrap" Text="Ball Depth Range" Margin="0,0,0,2"/>
@@ -45,7 +46,7 @@
             </Grid>
         </StackPanel>
         <TextBox x:Name="txtLog" TextWrapping="Wrap" Text="Log" Margin="655,470,10,10"/>
-        <Button x:Name="btnExit" Content="X" Click="btnExit_Click" Margin="10,10,812,630" Background="#FFB2B2B2" Width="20" Height="20" BorderBrush="#FFE0E0E0" Foreground="White"/>
+        <Button x:Name="btnExit" Content="X" Click="btnExit_Click" Margin="14,10,816,612" Background="#FFB2B2B2" Width="20" BorderBrush="#FFE0E0E0" Foreground="White"/>
         <StackPanel x:Name="pnlDisplayButton" HorizontalAlignment="Left" Height="100" Margin="14,530,0,0" VerticalAlignment="Top" Width="636" Orientation="Horizontal">
             <Button x:Name="btnTotal" Content="TOTAL" Width="110" Tag="0" Click="btnDisplay_Click"/>
             <Button x:Name="btnDepth" Content="DEPTH" Width="110" Tag="1" Click="btnDisplay_Click"/>
@@ -54,5 +55,6 @@
             <Button x:Name="btnOutput" Content="OUTPUT" Width="110" Tag="4" Click="btnDisplay_Click"/>
             <Button x:Name="btnDisplayOff" Content="OFF" Width="86" Click="btnDisplayOff_Click"/>
         </StackPanel>
+        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="39,10,0,0" TextWrapping="Wrap" Text="BallCheatAR with Kinect" VerticalAlignment="Top" Width="421" Background="#FF9C9C9C" Foreground="White" Height="19" MouseDown="textBlock_MouseDown"/>
     </Grid>
 </Window>
