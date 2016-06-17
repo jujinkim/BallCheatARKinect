@@ -5,29 +5,54 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BallCheatARKinect"
         mc:Ignorable="d"
-        Title="BallCheat" Height="660" Width="850" Loaded="frmMain_Loaded" Closing="frmMain_Closing" MouseDown="frmMain_MouseDown" WindowStyle="None" ResizeMode="CanMinimize" Background="White">
+        Title="BallCheat" Height="641" Width="850" Loaded="frmMain_Loaded" Closing="frmMain_Closing" MouseDown="frmMain_MouseDown" WindowStyle="None" ResizeMode="CanMinimize" Background="White">
     <Grid>
-        <Image x:Name="imgOutMain" HorizontalAlignment="Left" Height="480" Margin="10,45,0,0" VerticalAlignment="Top" Width="640" Tag="0" Cursor="Cross"/>
-        <StackPanel x:Name="pnlSetting" HorizontalAlignment="Left" Height="350" Margin="655,10,0,0" VerticalAlignment="Top" Width="185" Background="#FFFAFAFA">
-            <Button x:Name="btnSetPoolPos" Content="Set pool position"/>
-            <Button x:Name="btnSetPoolHeight" Content="Set pool height"/>
-            <TextBlock x:Name="txtDepthMin" TextWrapping="Wrap" Text="Depth Min" Margin="0,10,0,2"/>
-            <Slider x:Name="sldDepthMin" Minimum="300" Maximum="900" Value="600" SmallChange="1" LargeChange="10" TickFrequency="50" TickPlacement="BottomRight"/>
-            <TextBlock x:Name="txtDepthMax" TextWrapping="Wrap" Text="Depth Max" Margin="0,10,0,2"/>
-            <Slider x:Name="sldDepthMax" Minimum="900" Maximum="6000" SmallChange="1" LargeChange="10" TickFrequency="50" TickPlacement="BottomRight"/>
-            <TextBlock x:Name="txtBlobSizeMin" TextWrapping="Wrap" Text="BlobSizeMin" Margin="0,10,0,2"/>
-            <Slider x:Name="sldBlobSizeMin" Minimum="1" Maximum="50" Value="10" SmallChange="1" LargeChange="10" TickFrequency="50" TickPlacement="BottomRight"/>
-            <TextBlock x:Name="txtBlobSizeMax" TextWrapping="Wrap" Text="BlobSizeMax" Margin="0,10,0,2"/>
-            <Slider x:Name="sldBlobSizeMax" Minimum="1" Maximum="500" Value="110" SmallChange="1" LargeChange="10" TickFrequency="50" TickPlacement="BottomRight"/>
+        <Image x:Name="imgOutMain" HorizontalAlignment="Left" Height="480" Margin="10,45,0,0" VerticalAlignment="Top" Width="640" Tag="0" Cursor="Cross" MouseDown="imgOutMain_MouseDown" MouseMove="imgOutMain_MouseMove"/>
+        <StackPanel x:Name="pnlSetting" HorizontalAlignment="Left" Height="455" Margin="655,10,0,0" VerticalAlignment="Top" Width="185" Background="#FFFAFAFA">
+            <Button x:Name="btnSetPoolPos" Content="Set pool position" Height="30"/>
+            <Button x:Name="btnSetPoolHeight" Content="Set pool height" Height="30"/>
+            <TextBlock x:Name="lblRangeSetting" TextWrapping="Wrap" Text="Range Setting" Background="#FFBEBEBE" Height="30" TextAlignment="Center" FontSize="18"/>
+            <TextBlock x:Name="lblPoolDepthRange" TextWrapping="Wrap" Text="Pool Depth Range" Margin="0,0,0,2"/>
+            <StackPanel Orientation="Horizontal">
+                <Slider x:Name="sldPoolDepthRange" Maximum="100" Value="{Binding Mode=TwoWay, ElementName=txtPoolDepthRange, Path=Text}" SmallChange="1" LargeChange="10" TickFrequency="5" TickPlacement="BottomRight" ValueChanged="sldPoolDepthRange_ValueChanged" Margin="0,0,0,18" Width="145"/>
+                <TextBox x:Name="txtPoolDepthRange" Height="23" TextWrapping="Wrap" Text="20" Width="40" RenderTransformOrigin="0.425,0"/>
+            </StackPanel>
+            <TextBlock x:Name="lblBallDepthRange" TextWrapping="Wrap" Text="Ball Depth Range" Margin="0,0,0,2"/>
+            <StackPanel Orientation="Horizontal">
+                <Slider x:Name="sldBallDepthRange" Maximum="100" Value="{Binding Mode=TwoWay, ElementName=txtBallDepthRange, Path=Text}" SmallChange="1" LargeChange="10" TickFrequency="5" TickPlacement="BottomRight" ValueChanged="sldBallDepthRange_ValueChanged"  Width="145"/>
+                <TextBox x:Name="txtBallDepthRange" Height="23" TextWrapping="Wrap" Text="20" Width="40" RenderTransformOrigin="0.425,0"/>
+            </StackPanel>
+            <TextBlock x:Name="lblBallSizeMin" TextWrapping="Wrap" Text="Ball Size Min" Margin="0,0,0,2"/>
+            <StackPanel Orientation="Horizontal">
+                <Slider x:Name="sldBallSizeMin" Minimum="1" Maximum="30" Value="{Binding Mode=TwoWay, ElementName=txtBallSizeMin, Path=Text}" SmallChange="1" LargeChange="10" TickPlacement="BottomRight" ValueChanged="sldBallSizeMin_ValueChanged"  Width="145"/>
+                <TextBox x:Name="txtBallSizeMin" Height="23" TextWrapping="Wrap" Text="2" Width="40" RenderTransformOrigin="0.425,0"/>
+            </StackPanel>
+            <TextBlock x:Name="lblBallSizeMax" TextWrapping="Wrap" Text="Ball Size Max" Margin="0,0,0,2"/>
+            <StackPanel Orientation="Horizontal">
+                <Slider x:Name="sldBallSizeMax" Minimum="1" Maximum="30" Value="{Binding Mode=TwoWay, ElementName=txtBallSizeMax, Path=Text}" SmallChange="1" LargeChange="10" TickPlacement="BottomRight" ValueChanged="sldBallSizeMax_ValueChanged"  Width="145"/>
+                <TextBox x:Name="txtBallSizeMax" Height="23" TextWrapping="Wrap" Text="20" Width="40" RenderTransformOrigin="0.425,0"/>
+            </StackPanel>
+            <TextBlock x:Name="lblParams" TextWrapping="Wrap" Text="Parameters" Background="#FFBEBEBE" Height="30" TextAlignment="Center" FontSize="18"/>
+            <Grid Height="150" ShowGridLines="True">
+                <TextBlock x:Name="lblPoolPos1" Height="23" TextWrapping="Wrap" Text="PoolPos_LT" VerticalAlignment="Top" Width="90" HorizontalAlignment="Left" />
+                <TextBlock x:Name="lblPoolPos1Val" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="95" Margin="90,0,0,0" Grid.Column="1"/>
+                <TextBlock x:Name="lblPoolPos2" Height="23" TextWrapping="Wrap" Text="PoolPos_RB" VerticalAlignment="Top" Width="90" HorizontalAlignment="Left" Margin="0,23,0,0" Grid.Column="1" Grid.Row="1" />
+                <TextBlock x:Name="lblPoolPos2Val" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="95" Margin="90,23,0,0" Grid.Column="1" Grid.Row="1"/>
+                <TextBlock x:Name="lblPoolDepth" Height="23" TextWrapping="Wrap" Text="Pool Depth" VerticalAlignment="Top" Width="90" HorizontalAlignment="Left" Margin="0,46,0,0" Grid.Column="2" Grid.Row="2" />
+                <TextBlock x:Name="lblPoolDepthVal" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="95" Margin="90,46,0,0" Grid.Column="1" Grid.Row="2"/>
+                <TextBlock x:Name="lblBallDepth" Height="23" TextWrapping="Wrap" Text="Ball Depth" VerticalAlignment="Top" Width="90" HorizontalAlignment="Left" Margin="0,69,0,0" Grid.Column="3" Grid.Row="3" />
+                <TextBlock x:Name="lblBallDepthVal" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="95" Margin="90,69,0,0" Grid.Column="1" Grid.Row="3"/>
+            </Grid>
         </StackPanel>
-        <TextBox x:Name="txtLog" TextWrapping="Wrap" Text="Log" Margin="655,365,10,10"/>
+        <TextBox x:Name="txtLog" TextWrapping="Wrap" Text="Log" Margin="655,470,10,10"/>
         <Button x:Name="btnExit" Content="X" Click="btnExit_Click" Margin="10,10,812,630" Background="#FFB2B2B2" Width="20" Height="20" BorderBrush="#FFE0E0E0" Foreground="White"/>
         <StackPanel x:Name="pnlDisplayButton" HorizontalAlignment="Left" Height="100" Margin="14,530,0,0" VerticalAlignment="Top" Width="636" Orientation="Horizontal">
-            <Button x:Name="btnTotal" Content="TOTAL" Width="127" Tag="0" Click="btnDisplay_Click"/>
-            <Button x:Name="btnDepth" Content="DEPTH" Width="127" Tag="1" Click="btnDisplay_Click"/>
-            <Button x:Name="btnBall" Content="BALL" Width="127" Tag="2" Click="btnDisplay_Click"/>
-            <Button x:Name="btnCue" Content="CUE" Width="127" Tag="3" Click="btnDisplay_Click"/>
-            <Button x:Name="btnOutput" Content="OUTPUT" Width="127" Tag="4" Click="btnDisplay_Click"/>
+            <Button x:Name="btnTotal" Content="TOTAL" Width="110" Tag="0" Click="btnDisplay_Click"/>
+            <Button x:Name="btnDepth" Content="DEPTH" Width="110" Tag="1" Click="btnDisplay_Click"/>
+            <Button x:Name="btnBall" Content="BALL" Width="110" Tag="2" Click="btnDisplay_Click"/>
+            <Button x:Name="btnCue" Content="CUE" Width="110" Tag="3" Click="btnDisplay_Click"/>
+            <Button x:Name="btnOutput" Content="OUTPUT" Width="110" Tag="4" Click="btnDisplay_Click"/>
+            <Button x:Name="btnDisplayOff" Content="OFF" Width="86" Click="btnDisplayOff_Click"/>
         </StackPanel>
     </Grid>
 </Window>
