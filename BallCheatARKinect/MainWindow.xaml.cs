@@ -83,16 +83,16 @@ namespace BallCheatARKinect
                 colorPixels = new byte[this.sensor.ColorStream.FramePixelDataLength];
                 depthPixels = new DepthImagePixel[this.sensor.DepthStream.FramePixelDataLength];
                 colorBitmap = new WriteableBitmap(this.sensor.ColorStream.FrameWidth, this.sensor.ColorStream.FrameHeight, 96.0, 96.0, PixelFormats.Bgr32, null);
-                cueBitmap = new WriteableBitmap(this.sensor.ColorStream.FrameWidth, this.sensor.ColorStream.FrameHeight, 96.0, 96.0, PixelFormats.Bgr32, null);
-                displayBitmap = new WriteableBitmap(this.sensor.ColorStream.FrameWidth, this.sensor.ColorStream.FrameHeight, 96.0, 96.0, PixelFormats.Bgr32, null);
+                depthBitmap = new WriteableBitmap(this.sensor.DepthStream.FrameWidth, this.sensor.DepthStream.FrameHeight, 96.0, 96.0, PixelFormats.Bgr32, null);
 
-                SetDisplay();
+                //SetDisplay();
 
                 sensor.AllFramesReady += sensor_AllFramesReady;
 
                 try
                 {
                     sensor.Start();
+
                 }
                 catch (IOException ee)
                 {
@@ -113,35 +113,32 @@ namespace BallCheatARKinect
         {
             using (ColorImageFrame colorFrame = e.OpenColorImageFrame())
             {
-
-                if (colorFrame != null)
+                using (DepthImageFrame depthFrame = e.OpenDepthImageFrame())
                 {
+                    if (depthFrame != null)
+                    {
+                        imgBall = new Image<Bgr, byte>(depthFrame.SliceDepthImage((int)sldDepthMin.Value, (int)sldDepthMax.Value).ToBitmap());
 
-                    colorFrame.CopyPixelDataTo(this.colorPixels);
-                    this.colorBitmap.WritePixels(
-                        new Int32Rect(0, 0, this.colorBitmap.PixelWidth, this.colorBitmap.PixelHeight),
-                        this.colorPixels, this.colorBitmap.PixelWidth * sizeof(int), 0);
-                    imgColor = new Image<Bgr, byte>(colorBitmap.ToBitmap());
+                        depthFrame.CopyDepthImagePixelDataTo(depthPixels);
+                        depthBitmap.WritePixels(
+                            new Int32Rect(0, 0, this.depthBitmap.PixelWidth, this.depthBitmap.PixelHeight),
+                            this.depthPixels, this.depthBitmap.PixelWidth * sizeof(int), 0);
+                        imgDepth = new Image<Bgr, byte>(depthBitmap.ToBitmap());
+                    }
+
+                    if (colorFrame != null)
+                    {
+
+                        colorFrame.CopyPixelDataTo(this.colorPixels);
+                        this.colorBitmap.WritePixels(
+                            new Int32Rect(0, 0, this.colorBitmap.PixelWidth, this.colorBitmap.PixelHeight),
+                            this.colorPixels, this.colorBitmap.PixelWidth * sizeof(int), 0);
+                        imgColor = new Image<Bgr, byte>(colorBitmap.ToBitmap());
+                    }
+
+                    SetDisplay();
                 }
             }
-
-            using (DepthImageFrame depthFrame = e.OpenDepthImageFrame())
-            {
-                if (depthFrame != null)
-                {
-                    imgBall = new Image<Bgr, byte>(depthFrame.SliceDepthImage((int)sldDepthMin.Value, (int)sldDepthMax.Value).ToBitmap());
-
-                    depthFrame.CopyDepthImagePixelDataTo(depthPixels);
-                    depthBitmap.WritePixels(
-                        new Int32Rect(0, 0, this.depthBitmap.PixelWidth, this.depthBitmap.PixelHeight),
-                        this.depthPixels, this.depthBitmap.PixelWidth * sizeof(int), 0);
-                    imgDepth = new Image<Bgr, byte>(depthBitmap.ToBitmap());
-                }
-            }
-
-            imgColor.CopyTo(imgCue);
-            
-            
         }
 
         /// <summary>
@@ -149,37 +146,13 @@ namespace BallCheatARKinect
         /// </summary>
         private void SetDisplay()
         {
-            switch((DisplayImg)imgOutMain.Tag)
+            switch ((DisplayImg)Convert.ToInt32(imgOutMain.Tag))
             {
-                case DisplayImg.TOTAL: imgOutMain.Source = colorBitmap; break;
-                case DisplayImg.BALL: imgOutMain.Source = ballBitmap; break;
-                case DisplayImg.DEPTH: imgOutMain.Source = depthBitmap; break;
-                case DisplayImg.CUE: imgOutMain.Source = cueBitmap; break;
-                case DisplayImg.DISPLAY: imgOutMain.Source = displayBitmap; break;
-            }
-            switch ((DisplayImg)imgOutSub0.Tag)
-            {
-                case DisplayImg.TOTAL: imgOutSub0.Source = colorBitmap; break;
-                case DisplayImg.BALL: imgOutMain.Source = ballBitmap; break;
-                case DisplayImg.DEPTH: imgOutMain.Source = depthBitmap; break;
-                case DisplayImg.CUE: imgOutMain.Source = cueBitmap; break;
-                case DisplayImg.DISPLAY: imgOutMain.Source = displayBitmap; break;
-            }
-            switch ((DisplayImg)imgOutSub1.Tag)
-            {
-                case DisplayImg.TOTAL: imgOutSub1.Source = colorBitmap; break;
-                case DisplayImg.BALL: imgOutSub1.Source = ballBitmap; break;
-                case DisplayImg.DEPTH: imgOutSub1.Source = depthBitmap; break;
-                case DisplayImg.CUE: imgOutSub1.Source = cueBitmap; break;
-                case DisplayImg.DISPLAY: imgOutSub1.Source = displayBitmap; break;
-            }
-            switch ((DisplayImg)imgOutSub2.Tag)
-            {
-                case DisplayImg.TOTAL: imgOutSub2.Source = colorBitmap; break;
-                case DisplayImg.BALL: imgOutSub2.Source = ballBitmap; break;
-                case DisplayImg.DEPTH: imgOutSub2.Source = depthBitmap; break;
-                case DisplayImg.CUE: imgOutSub2.Source = cueBitmap; break;
-                case DisplayImg.DISPLAY: imgOutSub2.Source = displayBitmap; break;
+                case DisplayImg.TOTAL: imgOutMain.Source = ImageHelpers.ToBitmapSource(imgColor); break;
+                case DisplayImg.BALL: imgOutMain.Source = ImageHelpers.ToBitmapSource(imgBall); break;
+                case DisplayImg.DEPTH: imgOutMain.Source = depthBitmap; break;//ImageHelpers.ToBitmapSource(imgDepth); break;
+                case DisplayImg.CUE: imgOutMain.Source = ImageHelpers.ToBitmapSource(imgCue); break;
+                case DisplayImg.DISPLAY: imgOutMain.Source = ImageHelpers.ToBitmapSource(imgDisplay); break;
             }
         }
 
@@ -187,12 +160,9 @@ namespace BallCheatARKinect
         /// Swap main and sub image.
         /// </summary>
         /// <param name="subImgNum">Sub image number which will swapped with main image.</param>
-        private void SwapDisplay(Image subImg)
+        private void ChangeDisplay(Button btn)
         {
-            int tmp = (int)imgOutMain.Tag;
-            subImg.Tag = imgOutMain.Tag;
-            imgOutMain.Tag = tmp;
-
+            imgOutMain.Tag = btn.Tag;
             SetDisplay();
         }
 
@@ -221,13 +191,19 @@ namespace BallCheatARKinect
 
         private void btnExit_Click(object sender, RoutedEventArgs e)
         {
+            sensor.AllFramesReady -= sensor_AllFramesReady;
+            if (imgDisplay != null) imgDisplay.Dispose();
+            if(imgDepth != null) imgDepth.Dispose();
+            if(imgCue != null) imgCue.Dispose();
+            if(imgBall != null) imgBall.Dispose();
+            if(imgColor != null) imgColor.Dispose();
             Close();
         }
         #endregion
 
-        private void imgOutSub_MouseUp(object sender, MouseButtonEventArgs e)
+        private void btnDisplay_Click(object sender, RoutedEventArgs e)
         {
-            SwapDisplay((Image)sender);
+            ChangeDisplay((Button)sender);
         }
     }
 }

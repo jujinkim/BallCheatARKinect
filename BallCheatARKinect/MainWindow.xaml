@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="BallCheat" Height="660" Width="850" Loaded="frmMain_Loaded" Closing="frmMain_Closing" MouseDown="frmMain_MouseDown" WindowStyle="None" ResizeMode="CanMinimize" Background="White">
     <Grid>
-        <Image x:Name="imgOutMain" HorizontalAlignment="Left" Height="480" Margin="10,45,0,0" VerticalAlignment="Top" Width="640" Tag="4" Cursor="Cross"/>
+        <Image x:Name="imgOutMain" HorizontalAlignment="Left" Height="480" Margin="10,45,0,0" VerticalAlignment="Top" Width="640" Tag="0" Cursor="Cross"/>
         <StackPanel x:Name="pnlSetting" HorizontalAlignment="Left" Height="350" Margin="655,10,0,0" VerticalAlignment="Top" Width="185" Background="#FFFAFAFA">
             <Button x:Name="btnSetPoolPos" Content="Set pool position"/>
             <Button x:Name="btnSetPoolHeight" Content="Set pool height"/>
@@ -21,10 +21,13 @@
             <Slider x:Name="sldBlobSizeMax" Minimum="1" Maximum="500" Value="110" SmallChange="1" LargeChange="10" TickFrequency="50" TickPlacement="BottomRight"/>
         </StackPanel>
         <TextBox x:Name="txtLog" TextWrapping="Wrap" Text="Log" Margin="655,365,10,10"/>
-        <Image x:Name="imgOutSub2" HorizontalAlignment="Left" Height="105" Margin="330,545,0,0" VerticalAlignment="Top" Width="140" Tag="2" MouseUp="imgOutSub_MouseUp" Cursor="Hand"/>
-        <Image x:Name="imgOutSub1" HorizontalAlignment="Left" Height="105" Margin="185,545,0,0" VerticalAlignment="Top" Width="140" Tag="1" MouseUp="imgOutSub_MouseUp" Cursor="Hand"/>
-        <Image x:Name="imgOutSub0" HorizontalAlignment="Left" Height="105" Margin="40,545,0,0" VerticalAlignment="Top" Width="140" Tag="0" MouseUp="imgOutSub_MouseUp" Cursor="Hand"/>
-        <Image x:Name="imgOutSub3" HorizontalAlignment="Left" Height="105" Margin="475,545,0,0" VerticalAlignment="Top" Width="140" Tag="3" MouseUp="imgOutSub_MouseUp" Cursor="Hand"/>
         <Button x:Name="btnExit" Content="X" Click="btnExit_Click" Margin="10,10,812,630" Background="#FFB2B2B2" Width="20" Height="20" BorderBrush="#FFE0E0E0" Foreground="White"/>
+        <StackPanel x:Name="pnlDisplayButton" HorizontalAlignment="Left" Height="100" Margin="14,530,0,0" VerticalAlignment="Top" Width="636" Orientation="Horizontal">
+            <Button x:Name="btnTotal" Content="TOTAL" Width="127" Tag="0" Click="btnDisplay_Click"/>
+            <Button x:Name="btnDepth" Content="DEPTH" Width="127" Tag="1" Click="btnDisplay_Click"/>
+            <Button x:Name="btnBall" Content="BALL" Width="127" Tag="2" Click="btnDisplay_Click"/>
+            <Button x:Name="btnCue" Content="CUE" Width="127" Tag="3" Click="btnDisplay_Click"/>
+            <Button x:Name="btnOutput" Content="OUTPUT" Width="127" Tag="4" Click="btnDisplay_Click"/>
+        </StackPanel>
     </Grid>
 </Window>

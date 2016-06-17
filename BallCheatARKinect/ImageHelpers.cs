@@ -97,6 +97,7 @@ namespace BallCheatARKinect
         /// <returns>The equivalent BitmapSource</returns>
         public static BitmapSource ToBitmapSource(IImage image)
         {
+            if (image == null) return null;
             using (System.Drawing.Bitmap source = image.Bitmap)
             {
                 IntPtr ptr = source.GetHbitmap(); //obtain the Hbitmap
