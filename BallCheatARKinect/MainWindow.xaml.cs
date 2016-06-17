@@ -26,15 +26,38 @@ namespace BallCheatARKinect
     {
         enum DisplayImg { TOTAL, BALL, DEPTH, CUE, DISPLAY }
 
+        #region Kinect Objects
         KinectSensor sensor;
-        WriteableBitmap depthBitmap; Image<Bgr, byte> imgDepth;
-        WriteableBitmap ballBitmap; Image<Bgr, byte> imgBall;
-        WriteableBitmap colorBitmap; Image<Bgr, byte> imgColor;
-        WriteableBitmap cueBitmap;   Image<Bgr, byte> imgCue;
-        WriteableBitmap displayBitmap; Image<Bgr, byte> imgDisplay;
+        WriteableBitmap depthBitmap; 
+        WriteableBitmap ballBitmap;  
+        WriteableBitmap colorBitmap; 
+        WriteableBitmap cueBitmap;   
+        WriteableBitmap displayBitmap; 
         DepthImagePixel[] depthPixels;
         byte[] colorPixels;
+        #endregion
+
+        #region OpenCV Images
+        Image<Bgr, byte> imgDepth;
+        Image<Bgr, byte> imgBall;
+        Image<Bgr, byte> imgColor;
+        Image<Bgr, byte> imgCue;
+        Image<Bgr, byte> imgDisplay;
+        #endregion
+
+        #region private variables
+        int poolHeight = 0;             //당구대 높이값
+        int poolHeightRange = 10;       //당구대 높이값 오차범위
+        int ballHeight = 10;            //공 높이값
+        int ballHeightRange = 3;        //공 높이값 오차범위
+
+        int ballDrawingRadiusMultiply = 2;  //출력할 때 공 동그라미 그리는거 크기 반지름배수
+
+
         int blobCount = 0;
+        
+        #endregion
+
 
         public MainWindow()
         {
@@ -54,13 +77,14 @@ namespace BallCheatARKinect
             //initialize Kinect sensor
             if(sensor != null)
             {
-                this.sensor.DepthStream.Enable(DepthImageFormat.Resolution640x480Fps30);
-                this.sensor.ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30);
-                this.colorPixels = new byte[this.sensor.ColorStream.FramePixelDataLength];
-                this.depthPixels = new DepthImagePixel[this.sensor.DepthStream.FramePixelDataLength];
-                this.colorBitmap = new WriteableBitmap(this.sensor.ColorStream.FrameWidth, this.sensor.ColorStream.FrameHeight, 96.0, 96.0, PixelFormats.Bgr32, null);
-                this.cueBitmap = new WriteableBitmap(this.sensor.ColorStream.FrameWidth, this.sensor.ColorStream.FrameHeight, 96.0, 96.0, PixelFormats.Bgr32, null);
-                this.displayBitmap = new WriteableBitmap(this.sensor.ColorStream.FrameWidth, this.sensor.ColorStream.FrameHeight, 96.0, 96.0, PixelFormats.Bgr32, null);
+                sensor.DepthStream.Range = DepthRange.Near;
+                sensor.DepthStream.Enable(DepthImageFormat.Resolution640x480Fps30);
+                sensor.ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30);
+                colorPixels = new byte[this.sensor.ColorStream.FramePixelDataLength];
+                depthPixels = new DepthImagePixel[this.sensor.DepthStream.FramePixelDataLength];
+                colorBitmap = new WriteableBitmap(this.sensor.ColorStream.FrameWidth, this.sensor.ColorStream.FrameHeight, 96.0, 96.0, PixelFormats.Bgr32, null);
+                cueBitmap = new WriteableBitmap(this.sensor.ColorStream.FrameWidth, this.sensor.ColorStream.FrameHeight, 96.0, 96.0, PixelFormats.Bgr32, null);
+                displayBitmap = new WriteableBitmap(this.sensor.ColorStream.FrameWidth, this.sensor.ColorStream.FrameHeight, 96.0, 96.0, PixelFormats.Bgr32, null);
 
                 SetDisplay();
 
@@ -80,6 +104,7 @@ namespace BallCheatARKinect
             if(sensor == null)
             {
                 log("Kinect Connect Fail");
+                pnlSetting.IsEnabled = false;
             }
         }
 
@@ -95,9 +120,7 @@ namespace BallCheatARKinect
                     colorFrame.CopyPixelDataTo(this.colorPixels);
                     this.colorBitmap.WritePixels(
                         new Int32Rect(0, 0, this.colorBitmap.PixelWidth, this.colorBitmap.PixelHeight),
-                        this.colorPixels,
-                        this.colorBitmap.PixelWidth * sizeof(int),
-                        0);
+                        this.colorPixels, this.colorBitmap.PixelWidth * sizeof(int), 0);
                     imgColor = new Image<Bgr, byte>(colorBitmap.ToBitmap());
                 }
             }
@@ -111,12 +134,13 @@ namespace BallCheatARKinect
                     depthFrame.CopyDepthImagePixelDataTo(depthPixels);
                     depthBitmap.WritePixels(
                         new Int32Rect(0, 0, this.depthBitmap.PixelWidth, this.depthBitmap.PixelHeight),
-                        this.depthPixels,
-                        this.depthBitmap.PixelWidth * sizeof(int),
-                        0);
+                        this.depthPixels, this.depthBitmap.PixelWidth * sizeof(int), 0);
                     imgDepth = new Image<Bgr, byte>(depthBitmap.ToBitmap());
                 }
             }
+
+            imgColor.CopyTo(imgCue);
+            
             
         }
 
