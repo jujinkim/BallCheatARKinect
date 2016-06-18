@@ -5,30 +5,32 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BallCheatARKinect"
         mc:Ignorable="d"
-        Title="BallCheat" Height="641" Width="850" Loaded="frmMain_Loaded" Closing="frmMain_Closing" WindowStyle="None" ResizeMode="CanMinimize" Background="White">
+        Title="BallCheat" Height="641" Width="1037" Loaded="frmMain_Loaded" Closing="frmMain_Closing" WindowStyle="None" ResizeMode="CanMinimize" Background="White">
     <Grid>
         <Image x:Name="imgOutMain" HorizontalAlignment="Left" Height="480" Margin="10,45,0,0" VerticalAlignment="Top" Width="640" Tag="0" Cursor="Cross" MouseDown="imgOutMain_MouseDown" MouseMove="imgOutMain_MouseMove"/>
         <StackPanel x:Name="pnlSetting" HorizontalAlignment="Left" Height="455" Margin="655,10,0,0" VerticalAlignment="Top" Width="185" Background="#FFFAFAFA">
             <Button x:Name="btnSetPoolPos" Content="Set pool position" Height="30" Click="btnSetPoolPos_Click"/>
             <Button x:Name="btnSetPoolDepth" Content="Set pool height" Height="30" Click="btnSetPoolDepth_Click"/>
             <Button x:Name="btnSetBallDepth" Content="Set ball height" Height="30" Click="btnSetBallDepth_Click"/>
+            <Label x:Name="lblKinectTilt" Content="Kinect Tilt" Padding="5,5,5,0"/>
+            <Slider x:Name="sldKinectTilt" SmallChange="1" LargeChange="5" Maximum="27" Minimum="-27" PreviewMouseUp="sldKinectTilt_PreviewMouseUp"/>
             <TextBlock x:Name="lblRangeSetting" TextWrapping="Wrap" Text="Range Setting" Background="#FFBEBEBE" Height="30" TextAlignment="Center" FontSize="18"/>
-            <TextBlock x:Name="lblPoolDepthRange" TextWrapping="Wrap" Text="Pool Depth Range" Margin="0,0,0,2"/>
+            <Label x:Name="lblPoolDepthRange" Content="Pool Depth Range" Margin="0" Padding="5,5,5,0"/>
             <StackPanel Orientation="Horizontal">
                 <Slider x:Name="sldPoolDepthRange" Maximum="100" Value="{Binding Mode=TwoWay, ElementName=txtPoolDepthRange, Path=Text}" SmallChange="1" LargeChange="10" TickFrequency="5" TickPlacement="BottomRight" ValueChanged="sldPoolDepthRange_ValueChanged" Width="145"/>
                 <TextBox x:Name="txtPoolDepthRange" Height="23" TextWrapping="Wrap" Text="20" Width="40" RenderTransformOrigin="0.425,0"/>
             </StackPanel>
-            <TextBlock x:Name="lblBallDepthRange" TextWrapping="Wrap" Text="Ball Depth Range" Margin="0,0,0,2"/>
+            <Label x:Name="lblBallDepthRange" Content="Ball Depth Range" Margin="0" Padding="5,5,5,0"/>
             <StackPanel Orientation="Horizontal">
                 <Slider x:Name="sldBallDepthRange" Maximum="100" Value="{Binding Mode=TwoWay, ElementName=txtBallDepthRange, Path=Text}" SmallChange="1" LargeChange="10" TickFrequency="5" TickPlacement="BottomRight" ValueChanged="sldBallDepthRange_ValueChanged"  Width="145"/>
                 <TextBox x:Name="txtBallDepthRange" Height="23" TextWrapping="Wrap" Text="20" Width="40" RenderTransformOrigin="0.425,0"/>
             </StackPanel>
-            <TextBlock x:Name="lblBallSizeMin" TextWrapping="Wrap" Text="Ball Size Min" Margin="0,0,0,2"/>
+            <Label x:Name="lblBallSizeMin" Content="Ball Size Min" Margin="0" Padding="5,5,5,0"/>
             <StackPanel Orientation="Horizontal">
                 <Slider x:Name="sldBallSizeMin" Minimum="1" Maximum="30" Value="{Binding Mode=TwoWay, ElementName=txtBallSizeMin, Path=Text}" SmallChange="1" LargeChange="10" TickPlacement="BottomRight" ValueChanged="sldBallSizeMin_ValueChanged"  Width="145"/>
                 <TextBox x:Name="txtBallSizeMin" Height="23" TextWrapping="Wrap" Text="2" Width="40" RenderTransformOrigin="0.425,0"/>
             </StackPanel>
-            <TextBlock x:Name="lblBallSizeMax" TextWrapping="Wrap" Text="Ball Size Max" Margin="0,0,0,2"/>
+            <Label x:Name="lblBallSizeMax" Content="Ball Size Max" Margin="0" Padding="5,5,5,0"/>
             <StackPanel Orientation="Horizontal">
                 <Slider x:Name="sldBallSizeMax" Minimum="1" Maximum="30" Value="{Binding Mode=TwoWay, ElementName=txtBallSizeMax, Path=Text}" SmallChange="1" LargeChange="10" TickPlacement="BottomRight" ValueChanged="sldBallSizeMax_ValueChanged"  Width="145"/>
                 <TextBox x:Name="txtBallSizeMax" Height="23" TextWrapping="Wrap" Text="20" Width="40" RenderTransformOrigin="0.425,0"/>
@@ -36,9 +38,9 @@
             <TextBlock x:Name="lblParams" TextWrapping="Wrap" Text="Parameters" Background="#FFBEBEBE" Height="30" TextAlignment="Center" FontSize="18"/>
             <Grid Height="150" ShowGridLines="True">
                 <TextBlock x:Name="lblPoolPos1" Height="23" TextWrapping="Wrap" Text="PoolPos_LT" VerticalAlignment="Top" Width="90" HorizontalAlignment="Left" />
-                <TextBlock x:Name="lblPoolPos1Val" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="95" Margin="90,0,0,0" Grid.Column="1"/>
+                <TextBlock x:Name="lblPoolPos1Val" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="0,0" VerticalAlignment="Top" Width="95" Margin="90,0,0,0" Grid.Column="1"/>
                 <TextBlock x:Name="lblPoolPos2" Height="23" TextWrapping="Wrap" Text="PoolPos_RB" VerticalAlignment="Top" Width="90" HorizontalAlignment="Left" Margin="0,23,0,0" Grid.Column="1" Grid.Row="1" />
-                <TextBlock x:Name="lblPoolPos2Val" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="95" Margin="90,23,0,0" Grid.Column="1" Grid.Row="1"/>
+                <TextBlock x:Name="lblPoolPos2Val" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="0,0" VerticalAlignment="Top" Width="95" Margin="90,23,0,0" Grid.Column="1" Grid.Row="1"/>
                 <TextBlock x:Name="lblPoolDepth" Height="23" TextWrapping="Wrap" Text="Pool Depth" VerticalAlignment="Top" Width="90" HorizontalAlignment="Left" Margin="0,46,0,0" Grid.Column="2" Grid.Row="2" />
                 <TextBlock x:Name="lblPoolDepthVal" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="95" Margin="90,46,0,0" Grid.Column="1" Grid.Row="2"/>
                 <TextBlock x:Name="lblBallDepth" Height="23" TextWrapping="Wrap" Text="Ball Depth" VerticalAlignment="Top" Width="90" HorizontalAlignment="Left" Margin="0,69,0,0" Grid.Column="3" Grid.Row="3" />
@@ -46,7 +48,7 @@
             </Grid>
         </StackPanel>
         <TextBox x:Name="txtLog" TextWrapping="Wrap" Text="Log" Margin="655,470,10,10"/>
-        <Button x:Name="btnExit" Content="X" Click="btnExit_Click" Margin="14,10,816,612" Background="#FFB2B2B2" Width="20" BorderBrush="#FFE0E0E0" Foreground="White"/>
+        <Button x:Name="btnExit" Content="X" Click="btnExit_Click" Margin="10,10,1007,612" Background="#FFB2B2B2" Width="20" BorderBrush="#FFE0E0E0" Foreground="White"/>
         <StackPanel x:Name="pnlDisplayButton" HorizontalAlignment="Left" Height="100" Margin="14,530,0,0" VerticalAlignment="Top" Width="636" Orientation="Horizontal">
             <Button x:Name="btnTotal" Content="TOTAL" Width="110" Tag="0" Click="btnDisplay_Click"/>
             <Button x:Name="btnDepth" Content="DEPTH" Width="110" Tag="1" Click="btnDisplay_Click"/>
@@ -56,5 +58,39 @@
             <Button x:Name="btnDisplayOff" Content="OFF" Width="86" Click="btnDisplayOff_Click"/>
         </StackPanel>
         <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="39,10,0,0" TextWrapping="Wrap" Text="BallCheatAR with Kinect" VerticalAlignment="Top" Width="421" Background="#FF9C9C9C" Foreground="White" Height="19" MouseDown="textBlock_MouseDown"/>
+        <StackPanel x:Name="pnlSetting2" HorizontalAlignment="Left" Height="455" Margin="845,10,0,0" VerticalAlignment="Top" Width="180">
+            <TextBlock x:Name="lblOutoutWarping" TextWrapping="Wrap" Text="Output Warping" Background="#FFBEBEBE" Height="30" TextAlignment="Center" FontSize="18"/>
+            <Grid x:Name="pnlOutputWarping" Height="176">
+                <Grid x:Name="pnlOutWrapLT" HorizontalAlignment="Left" Height="72" Margin="10,10,0,0" VerticalAlignment="Top" Width="72">
+                    <Button x:Name="btnOutWrapLT_Up" Content="▲" HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Margin="24,0,0,0" Height="24" Click="btnOutWrap_Click" Tag="LTU"/>
+                    <Button x:Name="btnOutWrapLT_Right" Content="▶" HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Margin="48,24,0,0" Height="24" Click="btnOutWrap_Click" Tag="LTR"/>
+                    <Button x:Name="btnOutWrapLT_Left" Content="◀" HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Margin="0,24,0,0" Height="24" Click="btnOutWrap_Click" Tag="LTL"/>
+                    <Button x:Name="btnOutWrapLT_Down" Content="▼" HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Margin="24,48,0,0" Height="24" Click="btnOutWrap_Click" Tag="LTD"/>
+                </Grid>
+                <Grid x:Name="pnlOutWrapRT" HorizontalAlignment="Left" Height="72" Margin="98,10,0,0" VerticalAlignment="Top" Width="72">
+                    <Button x:Name="btnOutWrapRT_Up" Content="▲" HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Margin="24,0,0,0" Height="24" Click="btnOutWrap_Click" Tag="RTU"/>
+                    <Button x:Name="btnOutWrapRT_Right" Content="▶" HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Margin="48,24,0,0" Height="24" Click="btnOutWrap_Click" Tag="RTR"/>
+                    <Button x:Name="btnOutWrapRT_Left" Content="◀" HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Margin="0,24,0,0" Height="24" Click="btnOutWrap_Click" Tag="RTL"/>
+                    <Button x:Name="btnOutWrapRT_Down" Content="▼" HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Margin="24,48,0,0" Height="24" Click="btnOutWrap_Click" Tag="RTD"/>
+                </Grid>
+                <Grid x:Name="pnlOutWrapRB" HorizontalAlignment="Left" Height="72" Margin="98,94,0,0" VerticalAlignment="Top" Width="72">
+                    <Button x:Name="btnOutWrapRB_Up" Content="▲" HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Margin="24,0,0,0" Height="24" Click="btnOutWrap_Click" Tag="RBU"/>
+                    <Button x:Name="btnOutWrapRB_Right" Content="▶" HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Margin="48,24,0,0" Height="24" Click="btnOutWrap_Click" Tag="RBR"/>
+                    <Button x:Name="btnOutWrapRB_Left" Content="◀" HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Margin="0,24,0,0" Height="24" Click="btnOutWrap_Click" Tag="RBL"/>
+                    <Button x:Name="btnOutWrapRB_Down" Content="▼" VerticalAlignment="Top" Margin="24,48,24,0" Height="24" Click="btnOutWrap_Click" Tag="RBD"/>
+                </Grid>
+                <Grid x:Name="pnlOutWrapLB" HorizontalAlignment="Left" Height="72" Margin="10,94,0,0" VerticalAlignment="Top" Width="72">
+                    <Button x:Name="btnOutWrapLB_Up" Content="▲" HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Margin="24,0,0,0" Height="24" Click="btnOutWrap_Click" Tag="LBU"/>
+                    <Button x:Name="btnOutWrapLB_Right" Content="▶" HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Margin="48,24,0,0" Height="24" Click="btnOutWrap_Click" Tag="LBR"/>
+                    <Button x:Name="btnOutWrapLB_Left" Content="◀" HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Margin="0,24,0,0" Height="24" Click="btnOutWrap_Click" Tag="LBL"/>
+                    <Button x:Name="btnOutWrapLB_Down" Content="▼" VerticalAlignment="Top" Margin="24,48,24,0" Height="24" Click="btnOutWrap_Click" Tag="LBD"/>
+                </Grid>
+            </Grid>
+            <TextBlock x:Name="lblStatus" TextWrapping="Wrap" Text="Status" Background="#FFBEBEBE" Height="30" TextAlignment="Center" FontSize="18"/>
+            <Grid Height="218">
+                <TextBlock x:Name="lblSttBallCount" Height="23" TextWrapping="Wrap" Text="Ball Count" VerticalAlignment="Top" Width="90" HorizontalAlignment="Left" />
+                <TextBlock x:Name="lblSttBallCountVal" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="95" Margin="90,0,-5,0"/>
+            </Grid>
+        </StackPanel>
     </Grid>
 </Window>
